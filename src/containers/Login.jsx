@@ -1,79 +1,44 @@
 import { Button } from '@mui/material';
-// import IconButton from '@mui/material/IconButton';
+import { useEffect } from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import React from 'react';
-import Cookies from 'js-cookie';
-<style>
-  {`
-    .loginpage {
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: lightblue;
-    }
-  `}
-</style>
-// import { makeStyles } from "@mui/styles";
-// const useStyles = makeStyles({
-//     loginbutton: {
-//         // margin:'500px',
-        
-           
-       
-      
-//     },
-//     loginpage: {
-//        height:'100vh',
-//        width:'100vw',
-//        display:'flex',
-//        flexDirection:'column',
-//        justifyContent:'center',
-//        alignItems:'center',
-//        background:'lightblue'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../app/features/userslice';
 
-      
-//     },
-//     button:{
-//         color:'black',
-        
-//     },
-//     appName:{
-//        marginBottom:'50px',
-//        size:'500'
-        
-//     }})
-    const checkoauth =async () => {
+
+const checkoauth =async () => {
         window.location.replace(
           "http://127.0.0.1:8000/auth/authorize",
-          
         );
-        const currentURL = window.location.href;
-     
- 
-        
-
-
-        
-       
-
-       
-       
       };
       const handleLogin=async ()=>{
         checkoauth()
-        
-      
-
-       
-
-      }
+}
 
 const Login = () => {
-    // const classes = useStyles();
-    // const {loginbutton,loginpage,button,appName} = classes;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+    useEffect(()=>{
+      const params = new URLSearchParams(window.location.search);
+      const token=params.get('auth_token')
+      const userId=params.get('userid')
+      const userName=params.get('username')
+      if(token!==null){
+        console.log(token)
+        console.log(userId)
+        console.log(userName)
+        dispatch(setUser({ username: userName, token, userId }));
+        localStorage.setItem('token', token);
+        localStorage.setItem('userid',userId);
+        localStorage.setItem('username',userName);
+        navigate('/dashboard')
+      }
+      else{
+        console.log("TOKEN NOT FOUND")
+      }
+    },[dispatch])
+    
   return (
     <>
     <div className="loginpage">
