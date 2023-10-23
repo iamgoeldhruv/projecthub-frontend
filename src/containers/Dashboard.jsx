@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import SideNav from '../components/SideNav';
 
 const Dashboard = () => {
   // Use useSelector to select the user data from the Redux store
@@ -7,7 +8,10 @@ const Dashboard = () => {
   console.log('stored token is'+localStorage.getItem('token'));
 
   return (
-    <div>
+    <>
+    <SideNav/>
+      
+   
     
       <h1>WELCOME TO DASHBOARD</h1>
       {user.isauthenticated ? (
@@ -19,7 +23,8 @@ const Dashboard = () => {
       ) : (
         <p>User is not authenticated.</p>
       )}
-    </div>
+     
+    </>
   );
 };
 
