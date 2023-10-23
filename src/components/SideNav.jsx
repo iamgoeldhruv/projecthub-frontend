@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Component, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -16,15 +16,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard'; // Import the Dashboard icon
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Import the Account Circle icon
-import AssignmentIcon from '@mui/icons-material/Assignment'; // Import the Assignment icon
-import SettingsIcon from '@mui/icons-material/Settings'; // Import the Settings icon
-import ChatIcon from '@mui/icons-material/Chat'; // Import the Chat icon
-import TimelineIcon from '@mui/icons-material/Timeline'; // Import the Timeline icon
+import DashboardIcon from '@mui/icons-material/Dashboard'; 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import SettingsIcon from '@mui/icons-material/Settings'; 
+import ChatIcon from '@mui/icons-material/Chat'; 
+import TimelineIcon from '@mui/icons-material/Timeline'; 
 import Dashboard from '../containers/Dashboard';
-import { useDispatch, useSelector } from 'react-redux';
-import { setMenuItems } from '../app/features/userslice';
+import Contact from '../containers/Contact';
+import Profile from '../containers/Profile';
+import Projects from '../containers/Projects';
+import  Sittings from '../containers/Sittings';
+import Timeline from '../containers/Timeline';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'; 
+// import { selectSelectedItem, setSelectedItem } from '../app/features/menuSlice';
+
 
 const drawerWidth = 240;
 
@@ -99,6 +106,10 @@ const DrawerComponent = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !=
 export default function SideNav() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [MenuItem, setMenuItem] = useState('Dashboard');
+  // useEffect
+  // const MenuuItem = useSelector(selectSelectedItem);
+  // const dispatch = useDispatch();
 
 
 
@@ -109,7 +120,36 @@ export default function SideNav() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleMenuItemClick=(menuitem)=>{}
+  const handleMenuItemClick = (menuItem) => {
+   
+    setMenuItem(menuItem);
+  };
+  
+
+  let componentToRender;
+
+  switch (MenuItem) {
+    case 'Dashboard':
+      componentToRender = <Dashboard />;
+      break;
+    case 'Profile':
+      componentToRender = <Profile />;
+      break;
+    case 'Projects':
+      componentToRender = <Projects />;
+      break;
+    case 'Settings':
+      componentToRender = <Sittings />;
+      break;
+    case 'Chat':
+      componentToRender = <Contact />;
+      break;
+    case 'My Timeline':
+      componentToRender = <Timeline />;
+      break;
+    default:
+      componentToRender = <Dashboard />; 
+  }
 
   
 
@@ -181,7 +221,8 @@ export default function SideNav() {
           ))}
         </List>
       </DrawerComponent>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3,marginTop:10 }}>
+        {componentToRender}
       </Box>
     </Box>
   );

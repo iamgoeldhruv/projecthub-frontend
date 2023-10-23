@@ -32,7 +32,7 @@ const Login = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('userid',userId);
         localStorage.setItem('username',userName);
-        navigate('/dashboard')
+        navigate('/projectapp')
       }
       else{
         console.log("TOKEN NOT FOUND")

@@ -14,7 +14,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       
-      <Route path="/dashboard/" element={<Dashboard />} />
+      <Route path="/projectapp/" element={<SideNav />} />
+      
     </Routes>
 
     </BrowserRouter>

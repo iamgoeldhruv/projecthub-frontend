@@ -1,21 +1,21 @@
-// menuSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  menuItems: [], // Initialize as an empty array
+  selectedItem: 'Dashboard', 
 };
 
 const menuSlice = createSlice({
   name: 'menu',
   initialState,
   reducers: {
-    setMenuItems: (state, action) => {
-      state.menuItems = action.payload;
+    setSelectedItem: (state, action) => {
+      state.selectedItem = action.payload;
     },
   },
 });
 
-export const { setMenuItems } = menuSlice.actions;
-export const selectMenuItems = (state) => state.menu.menuItems;
+export const { setSelectedItem } = menuSlice.actions;
+export const selectSelectedItem = (state) => state.menu.selectedItem;
 
 export default menuSlice.reducer;
