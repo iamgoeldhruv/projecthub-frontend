@@ -5,8 +5,10 @@ import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import { BrowserRouter,Routes,Route} from "react-router-dom"
 import SideNav from './components/SideNav';
+import NewProjectform from './components/NewProjectform';
 
 function App() {
+  
   return (
     <>
   
@@ -15,6 +17,7 @@ function App() {
       <Route path="/" element={<Login />} />
       
       <Route path="/projectapp/" element={<SideNav />} />
+      <Route path="/projectapp/newproject" element={<NewProjectform />} />
       
     </Routes>
 

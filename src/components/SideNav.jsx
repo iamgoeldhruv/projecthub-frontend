@@ -28,8 +28,9 @@ import Profile from '../containers/Profile';
 import Projects from '../containers/Projects';
 import  Sittings from '../containers/Sittings';
 import Timeline from '../containers/Timeline';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'; 
+ 
+import { Button } from '@mui/material';
+import NewProjectform from './NewProjectform';
 // import { selectSelectedItem, setSelectedItem } from '../app/features/menuSlice';
 
 
@@ -107,9 +108,11 @@ export default function SideNav() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [MenuItem, setMenuItem] = useState('Dashboard');
-  // useEffect
-  // const MenuuItem = useSelector(selectSelectedItem);
-  // const dispatch = useDispatch();
+  
+  const startNewProject=()=>{
+   window.location.replace('http://localhost:3000/projectapp/newproject')
+
+  }
 
 
 
@@ -157,7 +160,7 @@ export default function SideNav() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar  >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -171,15 +174,31 @@ export default function SideNav() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            PROJECT HUB
-          </Typography>
+        PROJECT HUB
+      </Typography>
+          <Button sx={{
+            marginLeft:open? 110:130
+        } } variant="contained" onClick={startNewProject}>
+        Start New Project
+      </Button>
+          <div >
+    <div>
+     
+    </div>
+    
+  </div>
         </Toolbar>
+        <div sx={{ flex: '1', textAlign: 'right' }}>
+   
+    </div>
       </AppBar>
       <DrawerComponent variant="permanent" open={open}>
+    
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
+          
         </DrawerHeader>
         <Divider />
         <List>
