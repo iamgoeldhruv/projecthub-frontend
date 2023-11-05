@@ -7,9 +7,23 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
+import axios from 'axios';
+
 
 export default function AddressForm() {
   const today = new Date();
+  function format (date) {  
+    if (!(date instanceof Date)) {
+      throw new Error('Invalid "date" argument. You must pass a date instance')
+    }
+  
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+  
+    return `${year}-${month}-${day}`
+  }
+ 
   const [formData, setFormData] = useState({
     creator: localStorage.getItem('userid'),
     date: today,
@@ -31,7 +45,31 @@ export default function AddressForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(JSON.stringify(formData, null, 2));
+    alert(today)
+    const postData = {
+      creator:localStorage.getItem('userid'),
+      name: formData.title,
+      description: formData.description,
+      wiki: formData.wiki,
+      github_link: formData.github,
+      is_visible: formData.visibility,
+      date_of_creation:format(today)
+    }
+    axios.post('http://127.0.0.1:8000/api/create_project/',postData,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: "Token " + localStorage.getItem("token"),
+      },
+    }).then((response)=>{
+      if(response.status===201){
+        console.log("PROJECT CREATED SUCCESSFULLY")
+      }
+      else{
+        console.log("Error creating project")
+      }
+    }).catch((error)=>{
+      console.log("error is",error)
+    })
   };
 
   const token = localStorage.getItem('token');
