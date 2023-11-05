@@ -1,11 +1,12 @@
 import React from 'react';
 
-import './App.css';
+ import './App.css';
 import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import { BrowserRouter,Routes,Route} from "react-router-dom"
 import SideNav from './components/SideNav';
 import NewProjectform from './components/NewProjectform';
+import Projectdetail from './containers/Projectdetail';
 
 function App() {
   
@@ -18,6 +19,8 @@ function App() {
       
       <Route path="/projectapp/" element={<SideNav />} />
       <Route path="/projectapp/newproject" element={<NewProjectform />} />
+      <Route path="/projectapp/project/id/:projectId" element={<Projectdetail />} />
+
       
     </Routes>
 

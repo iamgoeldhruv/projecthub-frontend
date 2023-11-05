@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {useNavigate} from "react-router-dom"
 
 
 
@@ -26,8 +27,12 @@ const theme = createTheme({
 });
 
 const Dashboard = () => {
+  const navigate=useNavigate();
   const dispatch = useDispatch();
   const userProjects = useSelector(selectUserProjects);
+  const  exploreProject=(id)=>{
+    navigate(`/projectapp/project/id/${id}`);
+  }
 
   useEffect(() => {
     dispatch(fetchUserProjects());
@@ -70,7 +75,7 @@ const Dashboard = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button variant="contained" size="small" endIcon={<ArrowForwardIcon />}>
+                  <Button variant="contained" size="small" endIcon={<ArrowForwardIcon />}  onClick={() => exploreProject(project.project_id)}>
                     Explore
                   </Button>
                 </CardActions>

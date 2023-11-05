@@ -8,9 +8,11 @@ import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import axios from 'axios';
+import {useNavigate} from "react-router-dom"
 
 
 export default function AddressForm() {
+  const navigate=useNavigate()
   const today = new Date();
   function format (date) {  
     if (!(date instanceof Date)) {
@@ -45,7 +47,7 @@ export default function AddressForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(today)
+  
     const postData = {
       creator:localStorage.getItem('userid'),
       name: formData.title,
@@ -62,7 +64,10 @@ export default function AddressForm() {
       },
     }).then((response)=>{
       if(response.status===201){
-        console.log("PROJECT CREATED SUCCESSFULLY")
+        var projectId=response.data.id;
+        navigate(`/projectapp/project/id/${projectId}`)
+
+        
       }
       else{
         console.log("Error creating project")

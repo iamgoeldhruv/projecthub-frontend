@@ -28,9 +28,10 @@ import Profile from '../containers/Profile';
 import Projects from '../containers/Projects';
 import  Sittings from '../containers/Sittings';
 import Timeline from '../containers/Timeline';
+import {useNavigate} from "react-router-dom"
  
 import { Button } from '@mui/material';
-import NewProjectform from './NewProjectform';
+
 // import { selectSelectedItem, setSelectedItem } from '../app/features/menuSlice';
 
 
@@ -105,13 +106,13 @@ const DrawerComponent = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !=
 );
 
 export default function SideNav() {
+  const navigate = useNavigate(); 
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [MenuItem, setMenuItem] = useState('Dashboard');
   
   const startNewProject=()=>{
-   window.location.replace('http://localhost:3000/projectapp/newproject')
-
+          navigate('/projectapp/newproject/')
   }
 
 
