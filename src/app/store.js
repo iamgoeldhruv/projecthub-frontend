@@ -5,7 +5,7 @@ import projectReducer from  './features/projectslice';
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    users: userReducer,
     menu: menuReducer,
     projects: projectReducer,
     

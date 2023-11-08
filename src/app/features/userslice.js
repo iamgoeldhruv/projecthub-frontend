@@ -1,25 +1,62 @@
-import { createSlice } from "@reduxjs/toolkit";
+// actions/projectActions.js
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  users: [],
+  loading: false,
+  error: null,
+};
 
 
+const getTokenFromLocalStorage = () => {
+  return localStorage.getItem('token'); 
+};
+
+export const fetchUsers = createAsyncThunk(
+  'users/fetchUsers',
+  async (_, { rejectWithValue }) => { 
+    const token = getTokenFromLocalStorage();
+    
+    if (!token) {
+    
+      return rejectWithValue('Token not found in local storage');
+    }
+    
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/users/`, {
+        headers: {
+          Authorization: "Token " + localStorage.getItem("token"),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-      isauthenticated: false,
-      username: null,
-      token: null,
-      userId: null,
-    },
-    reducers: {
-      setUser: (state, action) => {
-        state.isauthenticated = true;
-        state.username = action.payload.username;
-        state.token = action.payload.token;
-        state.userId = action.payload.userId;
-      },
-    },
-  });
-  
-  export const { setUser } = userSlice.actions;
-  export default userSlice.reducer;
- 
+  name: 'users',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+export const selectUsers = (state) => state.users.users;
+
+export default userSlice.reducer;

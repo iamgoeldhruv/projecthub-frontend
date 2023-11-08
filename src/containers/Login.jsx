@@ -3,8 +3,7 @@ import { Button, Box } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../app/features/userslice';
+
 import Card from '@mui/material/Card';
 
 import CardContent from '@mui/material/CardContent';
@@ -29,7 +28,7 @@ const bull = (
 );
 
 const Login = () => {
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const Login = () => {
       console.log(token);
       console.log(userId);
       console.log(userName);
-      dispatch(setUser({ username: userName, token, userId }));
+      
       localStorage.setItem('token', token);
       localStorage.setItem('userid', userId);
       localStorage.setItem('username', userName);
@@ -50,7 +49,7 @@ const Login = () => {
     } else {
       console.log("TOKEN NOT FOUND");
     }
-  }, [dispatch]);
+  }, []);
   
 
   return (

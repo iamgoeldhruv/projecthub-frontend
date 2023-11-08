@@ -14,6 +14,7 @@ const getTokenFromLocalStorage = () => {
   return localStorage.getItem('token'); 
 };
 
+
 export const fetchUserProjects = createAsyncThunk(
   'projects/fetchUserProjects',
   async (_, { rejectWithValue }) => { 
