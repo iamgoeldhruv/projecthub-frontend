@@ -30,8 +30,8 @@ const Dashboard = () => {
   const navigate=useNavigate();
   const dispatch = useDispatch();
   const userProjects = useSelector(selectUserProjects);
-  const  exploreProject=(id)=>{
-    navigate(`/projectapp/project/id/${id}`);
+  const  exploreProject=(id,name)=>{
+    navigate(`/projectapp/project/id/${id}/name/${name}`);
   }
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const Dashboard = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button variant="contained" size="small" endIcon={<ArrowForwardIcon />}  onClick={() => exploreProject(project.project_id)}>
+                  <Button variant="contained" size="small" endIcon={<ArrowForwardIcon />}  onClick={() => exploreProject(project.project_id,project.name)}>
                     Explore
                   </Button>
                 </CardActions>

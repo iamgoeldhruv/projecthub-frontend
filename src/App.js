@@ -19,7 +19,7 @@ function App() {
       
       <Route path="/projectapp/" element={<SideNav />} />
       <Route path="/projectapp/newproject" element={<NewProjectform />} />
-      <Route path="/projectapp/project/id/:projectId" element={<Projectdetail />} />
+      <Route path="/projectapp/project/id/:projectId/name/:projectName" element={<Projectdetail />} />
 
       
     </Routes>

@@ -65,7 +65,7 @@ export default function AddressForm() {
     }).then((response)=>{
       if(response.status===201){
         var projectId=response.data.id;
-        navigate(`/projectapp/project/id/${projectId}`)
+        navigate(`/projectapp/project/id/${projectId}/name/${postData.name}`)
 
         
       }

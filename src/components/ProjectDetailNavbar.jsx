@@ -16,44 +16,18 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers, selectUsers } from '../app/features/userslice';
+import { useParams } from 'react-router-dom';
+
 
 const drawerWidth = 240;
 const navItems = ['Add Member', 'View Team', 'Edit'];
 
-// function UserTable({ users, onClose }) {
-//   return (
-//     <div style={{ position: 'absolute', top: '100px', right: '50px',zIndex:1000 }}>
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>Username</th>
-//             <th>Action</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {users.map((user) => (
-//             <tr key={user.id}>
-//               <td>{user.username}</td>
-//               <td>
-//                 <Button variant="contained" color="primary" onClick={() => console.log(`Add ${user.username}`)}>
-//                   Add
-//                 </Button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//       <Button variant="contained" color="primary" onClick={onClose}>
-//         Done
-//       </Button>
-//     </div>
-//   );
-// }
 
 function ProjectDetailNavbar({ users, onButtonAction }) {
+  const { projectId, projectName } = useParams();
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [showUserTable, setShowUserTable] = React.useState(false);
+  const [showUserTable, setShowUserTable] = React.useState(true);
   
 
   const handleDrawerToggle = () => {
@@ -74,7 +48,7 @@ function ProjectDetailNavbar({ users, onButtonAction }) {
   const drawerContent = (
     <div>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Project Hub
+        ${projectName}
       </Typography>
       <Divider />
       <List>
@@ -92,7 +66,7 @@ function ProjectDetailNavbar({ users, onButtonAction }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{ backgroundColor: 'black' }}>
+      <AppBar component="nav" sx={{ backgroundColor: '#630330' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -108,7 +82,8 @@ function ProjectDetailNavbar({ users, onButtonAction }) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            PROJECT HUB
+           {projectName && projectName.toUpperCase()}
+
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
