@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers, selectUsers } from '../app/features/userslice';
+import { fetchLists, selectLists } from '../app/features/listslice';
 import { Paper,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Button,IconButton,
 } from '@mui/material';
 import background from '../image/projectbackground.jpg';
 import ProjectDetailNavbar from '../components/ProjectDetailNavbar';
+import ListInputPopup from '../components/ListInputPopup';
 // import List from '@mui/joy/List';
 // import ListItem from '@mui/joy/ListItem';
 import AddIcon from '@mui/icons-material/Add';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 
 const UserTable = ({ users,setOpenTable }) => {
  
 
   const { projectId, projectName } = useParams();
+
   
   
   
@@ -51,9 +59,12 @@ const UserTable = ({ users,setOpenTable }) => {
       
     });
     }
+    const deleteMember=()=>{
+
+    }
     
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
         <TableContainer component={Paper} style={{ maxWidth: '600px',height:'50vh',marginTop:100 }}>
           <Table>
             <TableHead  style={{backgroundColor:'#630330',color:'white'}}>
@@ -80,7 +91,11 @@ const UserTable = ({ users,setOpenTable }) => {
                       Add
                     </Button>
                   </TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>
+                  <IconButton color="error" aria-label="delete" onClick={() => deleteMember()}>
+                                  <DeleteIcon />
+                                </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -92,14 +107,30 @@ const UserTable = ({ users,setOpenTable }) => {
   
 
 const Projectdetail = () => {
+  const [ListPopup,setListPopup]=useState(false)
   
+  
+  const { projectId, projectName } = useParams();
   const [OpenTable, setOpenTable] = useState(true);
   const dispatch = useDispatch();
   const Users = useSelector(selectUsers);
+  const Lists=useSelector(selectLists);
   const [IsLoading, setIsLoading] = useState(false);
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchLists(projectId));
+
   }, [dispatch]);
+
+  const showCards=()=>{
+
+  }
+  const deleteList=()=>{
+
+  }
+  const closeListPopup = () => {
+    setListPopup(false);
+  };
   
 
 
@@ -109,7 +140,7 @@ const Projectdetail = () => {
     setOpenTable(true);
   };
   const addList=()=>{
-    alert("new list added")
+    setListPopup(true)
   }
 
   return (
@@ -120,15 +151,53 @@ const Projectdetail = () => {
         backgroundPosition: 'center', 
         backgroundPosition: "center",
         height: "100vh",
-        overflow: "hidden"}}>
+        overflow:'auto'
+       
+        }}>
       <ProjectDetailNavbar onButtonAction={handleButtonAction} />
       
       
       {OpenTable && <UserTable users={Users} setOpenTable={setOpenTable} />} 
+      <div className="maincontent" style={{ marginLeft: '20px', marginTop: '100px',display: 'flex', flexDirection: 'row', }}>
+            {Lists.map((list) => (
+                <div key={list.list_id} style={{ marginRight: '10px' }}>
+                   <Card sx={{ minWidth: 275 }}>
+                      <CardContent>
+                          <Typography sx={{ fontSize:18,marginLeft:10 }} color="black" gutterBottom>
+                           {list.list_name && list.list_name.toUpperCase()}
+                          </Typography>
+                          <div className="buttons" style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                          
+                                <Button variant="outlined" color="primary"  onClick={() => showCards()}>
+                                  Cards
+                                </Button>
+                                <IconButton color="error" aria-label="delete" onClick={() => deleteList()}>
+                                  <DeleteIcon />
+                                </IconButton>
+                          </div>
+                        
+        
+        
+        
+        
+
+        
+        
+        
+
+        
+                          
+                      </CardContent>
       
-      <Button variant="contained" color="secondary" endIcon={<AddIcon />} sx={{marginLeft:'20px',marginTop:'100px'}} onClick={addList} >
-        Add List 
-      </Button>
+                    </Card>
+                </div>
+       ))}
+          {ListPopup && <ListInputPopup onClose={closeListPopup} />}
+      
+            <Button variant="contained" color="secondary" endIcon={<AddIcon />} sx={{height:40,minWidth:200,position:'relative',marginTop:'100'}}  onClick={addList} >
+              Add List 
+            </Button>
+      </div>
         
       
       
