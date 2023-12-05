@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers, selectUsers } from '../app/features/userslice';
 import { fetchLists, selectLists } from '../app/features/listslice';
+import { fetchUsersdetail,selectUsersdetail } from '../app/features/usersdetailslice';
+import cardslice, { fetchCards, selectCards } from '../app/features/cardslice';
+import CardHeader from '@mui/material/CardHeader';
 import { Paper,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Button,IconButton,
 } from '@mui/material';
 import background from '../image/projectbackground.jpg';
 import ProjectDetailNavbar from '../components/ProjectDetailNavbar';
 import ListInputPopup from '../components/ListInputPopup';
-// import List from '@mui/joy/List';
-// import ListItem from '@mui/joy/ListItem';
 import AddIcon from '@mui/icons-material/Add';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -16,7 +17,16 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { styled } from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CardMedia from '@mui/material/CardMedia';
+import CardActions from '@mui/material/CardActions';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
 
 
 const UserTable = ({ users,setOpenTable }) => {
@@ -104,6 +114,128 @@ const UserTable = ({ users,setOpenTable }) => {
       </div>
     );
   };
+
+
+  const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+  })(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }));
+  
+
+
+
+
+const Cardslist=()=>{
+  const Cards=useSelector(selectCards);
+  const [expanded, setExpanded] = React.useState(false);
+
+ 
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+
+  };
+  const getCardColor = (priority) => {
+    switch (priority) {
+      case 3:
+        return '#FF4040';
+      case 2:
+        return 'yellow';
+      default:
+        return '#59E659';
+    }
+  };
+  
+
+ 
+
+ 
+  return(
+    <>
+          <div className="cardlist" style={{marginTop:20}}>
+            {Cards.map((card) => (
+
+
+
+                       
+
+             
+                      <div key={card.card_id} style={{ marginTop: '10px'  }}>
+                      <Card sx={{ maxWidth: 345, bgcolor:getCardColor(card.priority) }}>
+                       
+
+                        
+                        
+                        <CardHeader
+
+                            
+                       
+                                
+                          avatar={
+                            <Avatar sx={{ bgcolor: 'black' }} aria-label="recipe">
+                            
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton aria-label="settings">
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title= {card.card_name.toUpperCase()}
+                          subheader={card.date_of_creation}
+                        />
+                        <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                                 <h1>HELLO</h1>
+                             
+                            </Typography>
+                        </CardContent>
+                        <CardActions >
+                          
+                          <ExpandMore
+                            expand={expanded}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                          >
+                            <ExpandMoreIcon />
+                          </ExpandMore>
+                        </CardActions>
+                        <Collapse in={expanded} timeout="auto" unmountOnExit>
+                          <CardContent>
+                            <Typography paragraph>Description:</Typography>
+                            <Typography paragraph>
+                              {card.description}
+                            </Typography>
+                            <Typography paragraph>
+                              Date of creation {card.date_of_creation}<br></br>
+                              Deadline {card.deadline}
+                            </Typography>
+                           
+                            
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      </div>
+            ))}
+            
+
+            </div>
+
+
+
+
+  </>
+
+  );
+
+};
   
 
 const Projectdetail = () => {
@@ -112,22 +244,60 @@ const Projectdetail = () => {
   
   const { projectId, projectName } = useParams();
   const [OpenTable, setOpenTable] = useState(true);
+  const [ShowCardList,setShowCardList]=useState(false);
   const dispatch = useDispatch();
   const Users = useSelector(selectUsers);
   const Lists=useSelector(selectLists);
-  const [IsLoading, setIsLoading] = useState(false);
+  const [selectedListId ,setselectedListId]=useState(null)
+ 
+ 
+
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchLists(projectId));
 
   }, [dispatch]);
 
-  const showCards=()=>{
+  const showCards=(listId)=>{
+    
+    dispatch(fetchCards(listId));
+    if(ShowCardList===true){
+      setShowCardList(false)
+    }
+    else{
+      setShowCardList(true)
+    }
+    setselectedListId(listId)
+
+    
 
   }
-  const deleteList=()=>{
+  const deleteList=(id)=>{
+    try {
+      const response =  axios.delete(`http://127.0.0.1:8000/api/list/${id}/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: "Token " + localStorage.getItem("token"), 
+        },
+      });
+     
 
-  }
+      if (response.status === 200) {
+        alert('List deleted successfully!');
+        dispatch(fetchLists(projectId));
+       
+      } else {
+        dispatch(fetchLists(projectId));
+        alert('List deleted successfully!');
+       
+      }
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
+    
+  
   const closeListPopup = () => {
     setListPopup(false);
   };
@@ -168,14 +338,16 @@ const Projectdetail = () => {
                           </Typography>
                           <div className="buttons" style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                           
-                                <Button variant="outlined" color="primary"  onClick={() => showCards()}>
+                                <Button variant="outlined" color="primary"  onClick={() => showCards(list.list_id)}>
                                   Cards
                                 </Button>
-                                <IconButton color="error" aria-label="delete" onClick={() => deleteList()}>
+                                <IconButton color="error" aria-label="delete" onClick={() => deleteList(list.list_id)}>
                                   <DeleteIcon />
                                 </IconButton>
                           </div>
                         
+
+                          {ShowCardList && selectedListId===list.list_id && <Cardslist/>}
         
         
         
@@ -197,6 +369,7 @@ const Projectdetail = () => {
             <Button variant="contained" color="secondary" endIcon={<AddIcon />} sx={{height:40,minWidth:200,position:'relative',marginTop:'100'}}  onClick={addList} >
               Add List 
             </Button>
+           
       </div>
         
       

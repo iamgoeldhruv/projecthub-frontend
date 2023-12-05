@@ -3,9 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const initialState = {
-  users: [],
+  usersdetail: [],
   loading: false,
   error: null,
 };
@@ -15,9 +14,9 @@ const getTokenFromLocalStorage = () => {
   return localStorage.getItem('token'); 
 };
 
-export const fetchUsers = createAsyncThunk(
-  'users/fetchUsers',
-  async (_, { rejectWithValue }) => { 
+export const fetchUsersdetail = createAsyncThunk(
+  'usersdetail/fetchUsersdetail',
+  async (id, { rejectWithValue }) => { 
     const token = getTokenFromLocalStorage();
     
     if (!token) {
@@ -26,7 +25,7 @@ export const fetchUsers = createAsyncThunk(
     }
     
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/users/`, {
+      const response = await axios.get(`http://127.0.0.1:8000/api/user/${id}`, {
         headers: {
           Authorization: "Token " + localStorage.getItem("token"),
         },
@@ -38,26 +37,26 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
-  name: 'users',
+const userdetailSlice = createSlice({
+  name: 'usersdetail',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUsers.pending, (state) => {
+      .addCase(fetchUsersdetail.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
+      .addCase(fetchUsersdetail.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.usersdetail = action.payload;
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchUsersdetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const selectUsers = (state) => state.users.users;
+export const selectUsersdetail = (state) => state.usersdetail.usersdetail;
 
-export default userSlice.reducer;
+export default userdetailSlice.reducer;
