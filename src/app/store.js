@@ -5,6 +5,7 @@ import projectReducer from  './features/projectslice';
 import listReducer from './features/listslice';
 import cardReducer from './features/cardslice'
 import usersdetailReducer from './features/usersdetailslice'
+import projectMembersReducer from './features/projectmembersslice'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     lists: listReducer,
     cards: cardReducer,
     usersdetail: usersdetailReducer,
+    projectMembers: projectMembersReducer,
     
   },
 });

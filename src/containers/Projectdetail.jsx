@@ -28,6 +28,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 
+import CreateCardModel from '../components/CreateCardModel';
+
 
 const UserTable = ({ users,setOpenTable }) => {
  
@@ -240,6 +242,12 @@ const Cardslist=()=>{
 
 const Projectdetail = () => {
   const [ListPopup,setListPopup]=useState(false)
+  const [listid,setlistid]=useState(1);
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+ 
+  
   
   
   const { projectId, projectName } = useParams();
@@ -249,6 +257,8 @@ const Projectdetail = () => {
   const Users = useSelector(selectUsers);
   const Lists=useSelector(selectLists);
   const [selectedListId ,setselectedListId]=useState(null)
+  
+  // const toggle = () => setModal(!modal);
  
  
 
@@ -311,9 +321,20 @@ const Projectdetail = () => {
   };
   const addList=()=>{
     setListPopup(true)
-  }
 
+  }
+       
+   
+  const Assigntask=(id)=>{
+    setModal(!modal)
+    setlistid(id)
+   
+
+  }
   return (
+
+        <>
+        
     <div
         style={{background: `url(${background})`, 
         backgroundSize:'cover', 
@@ -324,11 +345,16 @@ const Projectdetail = () => {
         overflow:'auto'
        
         }}>
+       {modal && <CreateCardModel assign={Assigntask} id={listid} style={{marginLeft: '20px', marginTop: '100px'}}/>}
       <ProjectDetailNavbar onButtonAction={handleButtonAction} />
-      
+     
+   
+
       
       {OpenTable && <UserTable users={Users} setOpenTable={setOpenTable} />} 
       <div className="maincontent" style={{ marginLeft: '20px', marginTop: '100px',display: 'flex', flexDirection: 'row', }}>
+       
+     
             {Lists.map((list) => (
                 <div key={list.list_id} style={{ marginRight: '10px' }}>
                    <Card sx={{ minWidth: 275 }}>
@@ -348,6 +374,12 @@ const Projectdetail = () => {
                         
 
                           {ShowCardList && selectedListId===list.list_id && <Cardslist/>}
+                         
+                        
+                            {/* <button onClick={Assigntask}>Assign Task</button> */}
+                           <Button variant="contained" color="secondary" endIcon={<AddIcon />} sx={{height:40,Width:100,position:'relative',marginTop:2,marginLeft:5}}  onClick={()=>Assigntask(list.list_id)} >
+                            Assign task
+                          </Button>
         
         
         
@@ -365,16 +397,20 @@ const Projectdetail = () => {
                 </div>
        ))}
           {ListPopup && <ListInputPopup onClose={closeListPopup} />}
-      
+         
             <Button variant="contained" color="secondary" endIcon={<AddIcon />} sx={{height:40,minWidth:200,position:'relative',marginTop:'100'}}  onClick={addList} >
               Add List 
             </Button>
+            
            
       </div>
+      
+
         
       
       
     </div>
+    </>
   );
 };
 
