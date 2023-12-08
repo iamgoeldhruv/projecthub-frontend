@@ -345,7 +345,7 @@ const Projectdetail = () => {
         overflow:'auto'
        
         }}>
-       {modal && <CreateCardModel assign={Assigntask} id={listid} style={{marginLeft: '20px', marginTop: '100px'}}/>}
+       {modal && <CreateCardModel assign={Assigntask} id={listid} projectId={projectId} style={{marginLeft: '20px', marginTop: '100px'}}/>}
       <ProjectDetailNavbar onButtonAction={handleButtonAction} />
      
    
