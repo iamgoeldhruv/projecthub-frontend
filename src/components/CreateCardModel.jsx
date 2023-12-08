@@ -17,16 +17,18 @@ import Select from 'react-select';
 
 
 const  CreateCardModel= props=> {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  var selectedOptions=[]
   const [selectedOptions1, setSelectedOptions1] = useState();
   const [show, setShow] = useState(true);
   const [userList, setUserList] = useState([]);
   const dispatch = useDispatch();
   function handleSelect(data) {
-    setSelectedOptions(data.value); 
+    // setSelectedOptions(data.value); 
+        selectedOptions.push(data[0].value)
     
   }
   function handleSelect1(data) {
+    alert(data.value)
     setSelectedOptions1(data.value);
     // console.log(selectedOptions1)
     
@@ -40,13 +42,6 @@ const  CreateCardModel= props=> {
   useEffect(() => {
     console.log("Selected Options:", selectedOptions);
   }, [selectedOptions]);
-  
-//   useEffect(() => {
-//     console.log("Selected Options 1:", selectedOptions1);
-//   }, [selectedOptions1]);
-
-
-
   const handleClose = () => {
     props.assign()
   }
@@ -108,18 +103,18 @@ const  CreateCardModel= props=> {
     event.preventDefault();
   
     const postData = {
-      list_id: { list_id: props.id },
+      list_id:props.id,
       card_name: formData.name,
       description: formData.description,
       deadline:formData.deadline,
-      assignee:[1],
+      assignee:selectedOptions,
       priority:selectedOptions1,
       attachments:null,
       color:null,
     
       date_of_creation:format(today)
     }
-    axios.post(`http://127.0.0.1:8000/api/card/create/${props.id}/`,postData,{
+    axios.post(`http://127.0.0.1:8000/api/card/create/`,postData,{
       headers: {
         'Content-Type': 'application/json',
         Authorization: "Token " + localStorage.getItem("token"),
@@ -283,7 +278,7 @@ const  CreateCardModel= props=> {
                 <div className="dropdown-container" style={{zIndex:99}}>
                     <Select
                     options={priorityList}
-                    placeholder="Priority"
+                    placeholder={selectedOptions1} 
                     value={selectedOptions1}
                     onChange={handleSelect1}
                     isSearchable={true}
