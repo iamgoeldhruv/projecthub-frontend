@@ -17,18 +17,18 @@ import Select from 'react-select';
 
 
 const  CreateCardModel= props=> {
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedOptions1, setSelectedOptions1] = useState();
   const [show, setShow] = useState(true);
   const [userList, setUserList] = useState([]);
   const dispatch = useDispatch();
   function handleSelect(data) {
-    setSelectedOptions(data.value);
+    setSelectedOptions(data.value); 
     
   }
   function handleSelect1(data) {
     setSelectedOptions1(data.value);
-    alert(selectedOptions1)
+    // console.log(selectedOptions1)
     
   }
   const priorityList=[{
@@ -37,6 +37,13 @@ const  CreateCardModel= props=> {
     {value:3,label:"Take time"
 
   }]
+  useEffect(() => {
+    console.log("Selected Options:", selectedOptions);
+  }, [selectedOptions]);
+  
+//   useEffect(() => {
+//     console.log("Selected Options 1:", selectedOptions1);
+//   }, [selectedOptions1]);
 
 
 
@@ -80,13 +87,11 @@ const  CreateCardModel= props=> {
     return `${year}-${month}-${day}`
   }
   const [formData, setFormData] = useState({
-    
-    date: today,
+ 
     name: "",
     description: "", 
-    wiki: "", 
-    github: "", 
-    visibility: false, 
+    deadline: "", 
+   
   });
   
 
@@ -103,23 +108,27 @@ const  CreateCardModel= props=> {
     event.preventDefault();
   
     const postData = {
-      list_id:props.id,
+      list_id: { list_id: props.id },
       card_name: formData.name,
       description: formData.description,
-      wiki: formData.wiki,
-      github_link: formData.github,
-      is_visible: formData.visibility,
+      deadline:formData.deadline,
+      assignee:[1],
+      priority:selectedOptions1,
+      attachments:null,
+      color:null,
+    
       date_of_creation:format(today)
     }
-    axios.post('http://127.0.0.1:8000/api/create_project/',postData,{
+    axios.post(`http://127.0.0.1:8000/api/card/create/${props.id}/`,postData,{
       headers: {
         'Content-Type': 'application/json',
         Authorization: "Token " + localStorage.getItem("token"),
       },
     }).then((response)=>{
       if(response.status===201){
-        var projectId=response.data.id;
+       
         // navigate(`/projectapp/project/id/${projectId}/name/${postData.name}`)
+        alert('success')
 
         
       }
