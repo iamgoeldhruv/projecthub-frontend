@@ -17,20 +17,23 @@ import Select from 'react-select';
 
 
 const  CreateCardModel= props=> {
-  var selectedOptions=[]
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   const [selectedOptions1, setSelectedOptions1] = useState();
   const [show, setShow] = useState(true);
   const [userList, setUserList] = useState([]);
   const dispatch = useDispatch();
   function handleSelect(data) {
-    // setSelectedOptions(data.value); 
-        selectedOptions.push(data[0].value)
+   
+        // selectedOptions.push(data[0].value)
+        setSelectedOptions(data);
     
   }
+  
   function handleSelect1(data) {
     alert(data.value)
     setSelectedOptions1(data.value);
-    // console.log(selectedOptions1)
+   
     
   }
   const priorityList=[{
@@ -101,13 +104,14 @@ const  CreateCardModel= props=> {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const assigneeValues = selectedOptions.map(option => option.value);
   
     const postData = {
       list_id:props.id,
       card_name: formData.name,
       description: formData.description,
       deadline:formData.deadline,
-      assignee:selectedOptions,
+      assignee:assigneeValues,
       priority:selectedOptions1,
       attachments:null,
       color:null,
@@ -124,6 +128,7 @@ const  CreateCardModel= props=> {
        
         // navigate(`/projectapp/project/id/${projectId}/name/${postData.name}`)
         alert('success')
+        props.assign()
 
         
       }
@@ -154,7 +159,7 @@ const  CreateCardModel= props=> {
         <Modal.Body>
             <form>
             <Box height={0} />
-        <Paper elevation={3} sx={{ backgroundColor: "#A45EE5", }}>
+        <Paper elevation={3} sx={{ backgroundColor: "black", }}>
           <Box sx={{marginLeft:1,marginTop:2 }}>
            
 
@@ -278,7 +283,7 @@ const  CreateCardModel= props=> {
                 <div className="dropdown-container" style={{zIndex:99}}>
                     <Select
                     options={priorityList}
-                    placeholder={selectedOptions1} 
+                    placeholder='Select Priority' 
                     value={selectedOptions1}
                     onChange={handleSelect1}
                     isSearchable={true}
