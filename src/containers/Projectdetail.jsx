@@ -66,6 +66,7 @@ const UserTable = ({ users,setOpenTable }) => {
     }).catch((error) => {
       if(error.response.status===400){
         alert("USER IS ALREADY A MEMBER OF THIS PROJECT")
+        console.log(error)
       }
      
       
