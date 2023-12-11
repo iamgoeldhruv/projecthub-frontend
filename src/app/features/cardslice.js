@@ -14,7 +14,7 @@ const getTokenFromLocalStorage = () => {
   
   export const fetchCards = createAsyncThunk(
     'cards/fetchCards',
-    async (list_id, { rejectWithValue }) => { 
+    async ({list_id,projectId} ,{ rejectWithValue }) => { 
       const token = getTokenFromLocalStorage();
       
       if (!token) {
@@ -23,13 +23,18 @@ const getTokenFromLocalStorage = () => {
       }
       
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/cards/${list_id}`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/cards/${list_id}/${projectId}/`, {
           headers: {
             Authorization: "Token " + localStorage.getItem("token"),
+            
           },
         });
         return response.data;
+       
       } catch (error) {
+        if(error.response.status===403){
+          alert('You are not allowd only project members are allowed')
+        }
         return rejectWithValue(error.response.data);
       }
     }

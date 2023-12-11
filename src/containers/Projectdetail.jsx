@@ -264,14 +264,15 @@ const Projectdetail = () => {
  
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchUsers(projectId));
     dispatch(fetchLists(projectId));
 
   }, [dispatch]);
 
   const showCards=(listId)=>{
     
-    dispatch(fetchCards(listId));
+    dispatch(fetchCards({ list_id: listId ,projectId: projectId })
+    );
     if(ShowCardList===true){
       setShowCardList(false)
     }

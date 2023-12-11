@@ -30,6 +30,9 @@ const getTokenFromLocalStorage = () => {
         });
         return response.data;
       } catch (error) {
+        if(error.response.status===403){
+          alert("YOU DONT HAVE PERMISSION TO VIEW THIS PROJECT")
+        }
         return rejectWithValue(error.response.data);
       }
     }

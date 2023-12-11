@@ -65,6 +65,9 @@ const ListInputPopup = ({ onClose }) => {
             console.log("Error creating project")
           }
         }).catch((error)=>{
+          if(error.response.status===403){
+            alert('Only project members are allowed to create list list in this project')
+          }
           console.log("error is",error)
         })
       };

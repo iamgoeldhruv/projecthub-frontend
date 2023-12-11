@@ -17,7 +17,7 @@ const getTokenFromLocalStorage = () => {
 
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
-  async (_, { rejectWithValue }) => { 
+  async (id, { rejectWithValue }) => { 
     const token = getTokenFromLocalStorage();
     
     if (!token) {
@@ -26,7 +26,7 @@ export const fetchUsers = createAsyncThunk(
     }
     
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/users/`, {
+      const response = await axios.get(`http://127.0.0.1:8000/api/users/${id}/`, {
         headers: {
           Authorization: "Token " + localStorage.getItem("token"),
         },
